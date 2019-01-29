@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+
+	<link rel="stylesheet" href="/styles/styles.css" />
+
+	<script type="text/javascript" src="/scripts/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="/scripts/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/scripts/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="/scripts/jquery.iframe-transport.js"></script>
+	<script type="text/javascript" src="/scripts/jquery.fileupload.js"></script>
+
+	<script type="text/javascript" src="/scripts/google-youtube-auth.js"></script>
+	<script src="https://apis.google.com/js/client.js?onload=handleGoogleClientLoad"></script>
+	<script src="https://www.youtube.com/iframe_api"></script>
+
+	<script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
+	<script>SC.initialize({client_id:'14113fc5006e2b44652accd9dca6fd12'});</script>
+
+	<script src="/scripts/socket.io.js"></script>
+
+	<script type="text/javascript" src="/scripts/n_main.js"></script>
+	<script type="text/javascript" src="/scripts/view.js"></script>
+
+	<script type="text/javascript">
+		window.tunes.USER={
+			id:'<%= USER.id; %>',
+			nickname:'<%= USER.nickname; %>',
+			firstName:'<%= USER.firstName; %>',
+			lastName:'<%= USER.lastName; %>',
+			token:'<%= USER.token; %>'
+		};
+	</script>
+    
+	<title>Tunes</title>
+</head>
+
+<body class="music">
+
+	<div class="modal">
+		<!-- YOUTUBE SEARCH RESULTS MODAL-->
+		<div class="panel-wrapper yt-search-results">
+			<div class="panel-meta"><h3><div class="m-close button">X</div>Search YouTube</h3></div>
+			<div class="panel-header">
+				<div class="search">
+					<form class="youtube-search-form">
+						<label>SEARCH YOUTUBE</label>
+						<input type="text" class="yts" name="yts" />
+						<input type="submit" value="SEARCH" class="button" />
+					</form>
+				</div>
+				<div class="clrl"></div>
+			</div>
+			<div class="panel-body panel-yscroll">
+				<table cellpadding="0" cellspacing="0" border="0" class="youtubes youtubes-search-results">
+					<tbody>
+						<tr class="noqueue"><td>No results found yet...</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- EDIT FILE MODAL -->
+		<div class="panel-wrapper edit-file">
+			<div class="panel-meta"><h3><div class="m-close button">X</div>Edit File</h3></div>
+			<div class="panel-header"></div>
+			<div class="panel-body panel-yscroll edit">
+				<form class="edit-file-form">
+					<div class="edit-msg"></div>
+					<h3 class="file">EDIT FILE DATA</h3>
+					<label for="artist">ARTIST</label>
+					<input type="text" name="artist" placeholder="artist" />
+					<label for="title">TITLE</label>
+					<input type="text" name="title" placeholder="title" />
+					<label for="tags">TAGS</label>
+					<input type="text" name="tags" placeholder="tags" />
+					<input type="hidden" name="trackId" value="" />
+					<input type="submit" name="submit" value="SAVE" class="save button" />
+					<a class="delete_track button">DELETE</a>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="r1 r">
+		<div class="b bl b4" ng-controller="TrackCtrl">
+			<h2 class="np">
+				<a class="mute"></a>
+				<div class="volume"><a></a></div>
+				<span class="skip"></span>
+				DJ: <span class="who"></span>
+				<span class="yttime"><span></span><span></span></span>
+			</h2>
+			<div class="track"></div>
+		</div>
+		<div class="b br b1">
+			<div class="panel-wrapper">
+				<div class="panel-meta">
+					<h3 class="button active">ROOM</h3>
+					<h3 class="button">CHAT</h3>
+				</div>
+				<div class="panel-container">
+					<div class="panel room active">
+						<div class="panel-header">
+							<strong>ALL THOSE PRESENT:</strong>
+						</div>
+						<div class="panel-body panel-yscroll">
+							<table cellpadding="0" cellspacing="0" border="0" class="users">
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+					<div class="panel chat">
+						<div class="panel-header">
+						</div>
+						<div class="panel-body panel-yscroll">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="r2 r">
+		<div class="b b3 bl">
+			<div class="panel-wrapper">
+				<div class="panel-meta">
+					<h3 class="button active">QUEUE</h3>
+					<h3 class="button">RECENT</h3>
+				</div>
+				<div class="panel-container">
+					<div class="panel queue active">
+						<div class="panel-header">
+							<table cellpadding="0" cellspacing="0" border="0" class="thead">
+								<tr>
+									<td class="artsong">Artist / Song</td>
+									<td class="dj">DJ</td>
+									<td class="util">&nbsp;</td>
+									<td class="util">&nbsp;</td>
+								</tr>
+							</table>
+						</div>
+						<div class="panel-body panel-yscroll">
+							<table cellpadding="0" cellspacing="0" border="0" class="q">
+								<tbody>
+									<tr class="noqueue"><td>Load up the queue! Add songs from your lists or search YouTube.</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="panel recent">
+						<div class="panel-header">
+							<table cellpadding="0" cellspacing="0" border="0" class="thead">
+								<tr>
+									<td class="artsong">Artist / Song</td>
+									<td class="dj">DJ</td>
+									<td class="util">&nbsp;</td>
+									<td class="util">&nbsp;</td>
+								</tr>
+							</table>
+						</div>
+						<div class="panel-body panel-yscroll recently_played">
+							<table cellpadding="0" cellspacing="0" border="0" class="rec">
+								<tbody>
+									<tr class="noqueue"><td>No recently played tracks. Why not set it off?</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="b b2 br">
+			<div class="panel-wrapper">
+				<div class="panel-meta">
+					<h3 class="button active">YOUR MUSIC</h3>
+					<h3 class="button">OTHER MUSIC</h3>
+					<h3 class="button">YOUTUBE</h3>
+				</div>
+				<div class="panel-container">
+					<div class="panel yours active">
+						<div class="panel-header">
+							<div class="msg">Upload a song! Drag a file from your computer into this area.</div>
+							<div class="upload-meta">
+								<div class="uerror"></div>
+				        		<div class="loading">
+				        			Uploading...<br />
+				        			<div class="bar-wrapper">
+					        			<div class="bar"></div>
+					        		</div>
+				        		</div>
+				        	</div>
+							<div class="search">
+								<label>FILTER</label>
+								<select name="group" class="group" ng-model="filterGroup">
+									<option value="all">all</a>
+									<option value="artist">artist</a>
+									<option value="title">title</a>
+									<option value="tags">tags</a>
+								</select>
+								<input class="filter" type="text" />
+							</div>
+							<table cellpadding="0" cellspacing="0" border="0" class="thead">
+								<tr>
+									<td class="artsong">Artist / Song</td>
+									<td class="tags">Tags</td>
+									<td class="util">&nbsp;</td>
+									<td class="util">&nbsp;</td>
+								</tr>
+							</table>
+						</div>
+						<div class="panel-body panel-yscroll">
+							<table cellpadding="0" cellspacing="0" border="0" class="panel-body panel-yscroll files files-yours">
+								<tbody>
+									<tr><td class="noqueue">Upload a song to see your files here.</td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="panel other">
+						<div class="panel-header">
+							<div class="search">
+								<label>FILTER</label>
+								<select name="group" class="group" ng-model="filterGroup">
+									<option value="all">all</a>
+									<option value="artist">artist</a>
+									<option value="title">title</a>
+									<option value="tags">tags</a>
+								</select>
+								<input class="filter" type="text" />
+							</div>
+							<table cellpadding="0" cellspacing="0" border="0" class="thead">
+								<tr>
+									<td class="artsong">Artist / Song</td>
+									<td class="tags">Tags</td>
+									<td class="util">&nbsp;</td>
+									<td class="util">&nbsp;</td>
+								</tr>
+							</table>
+						</div>
+						<div class="panel-body panel-yscroll">
+							<table cellpadding="0" cellspacing="0" border="0" class="files files-other">
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="panel youtube">
+						<div class="panel-header">
+							<div class="search">
+								<div class="form-half">
+									<label>FILTER FAVORITES</label>
+									<input type="text" class="yt-filter-favorites" />
+								</div>
+								<form class="youtube-search-form form-half">
+									<label>SEARCH YOUTUBE</label>
+									<input type="text" class="yts" value="" name="yts" />
+									<input type="submit" value="SEARCH" class="button" />
+								</form>
+							</div>
+							<table cellpadding="0" cellspacing="0" border="0" class="thead">
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+							</table>
+						</div>
+						<div class="panel-body panel-yscroll">
+							<table cellpadding="0" cellspacing="0" border="0" class="youtubes youtubes-saved">
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+</body>

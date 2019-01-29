@@ -1,0 +1,14 @@
+<div class="file-bg" ng-if="trackHasArtwork()" ng-style="{ 'background-image' : 'url({{ getTrackArtwork() }})' }"></div>
+<div class="file-wrapper">
+	<audio id="mp3Player">
+		<source src="{{ TRACK.file }}" type="audio/{{ TRACK.filetype }}" token="{{ TRACK.token }}" />
+	</audio>
+	<img class="artwork" ng-src="{{ getTrackArtwork() }}" src="/styles/img/default.jpg" />
+	<div class="tt-wrapper">
+		<h3 ng-class="{hasimg : trackHasArtwork}">{{ TRACK.artist }}</h3>
+		<h1>{{ TRACK.title }}</h1>
+	</div>
+	<div class="timer" ng-if="trackHasDuration()">
+		<span>{{ trackCurrentTime }}</span> / <span>{{ trackDuration }}</span>
+	</div>
+</div>

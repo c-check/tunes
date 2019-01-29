@@ -1,0 +1,13 @@
+<div class="panel-body panel-yscroll edit">
+	<form ng-submit="submitFileEdit()">
+		<div ng-show="editHasMessage()">{{ MODAL.data.msg }}</div>
+		<h3 class="file">EDIT FILE DATA</h3>
+		<label for="artist">ARTIST</label>
+		<input type="text" name="artist" ng-model="MODAL.data.file.artist" placeholder="artist" />
+		<label for="title">TITLE</label>
+		<input type="text" name="title" ng-model="MODAL.data.file.title" placeholder="title" />
+		<label for="tags">TAGS</label>
+		<input type="text" name="tags" ng-model="MODAL.data.file.tags" placeholder="tags" />
+		<input type="submit" value="SAVE" class="save button" />
+	</form>
+</div>
